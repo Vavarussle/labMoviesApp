@@ -15,4 +15,10 @@ export interface BaseMovieProps {
     revenue: number;
     vote_count: number;
     favourite?: boolean;
+  
   }
+
+export interface BaseMovieListProps {
+    movies: BaseMovieProps[];
+  }
+  
