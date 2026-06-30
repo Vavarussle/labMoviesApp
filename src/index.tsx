@@ -5,10 +5,12 @@ import HomePage from "./pages/homePage";
 import MoviePage from "./pages/movieDetailsPage";
 import FavouriteMoviesPage from "./pages/favouriteMoviesPage"; // NEW
 import MoviesReviewPage from "./pages/movieReviewPage"; // NEW
+import Sidebar from "./components/siteHeader";
 
 const App = () => {
   return (
     <BrowserRouter>
+      <Sidebar />
       <ul>
         <li>
           <Link to="/">Home</Link>
