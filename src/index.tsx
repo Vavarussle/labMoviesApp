@@ -9,6 +9,8 @@ import Siteheader from "./components/siteHeader";
 import UpcomingMoviesPage from "./pages/upcomingMoviesPage";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { ReactQueryDevtools } from 'react-query/devtools';
+import MoviesContextProvider from "./contexts/moviesContext";
+import { Movie } from "@mui/icons-material";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,23 +27,17 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-      <Siteheader />
-      <ul>
-          <li>
-          <Link to="/">Home</Link>
-          </li>
-          <li>
-          <Link to="/movies/favourites">Favourites</Link>
-          </li>
-      </ul>
-      <Routes>
-          <Route path="/reviews/:id" element={<MoviesReviewPage />} />
-          <Route path="/movies/favourites" element={<FavouriteMoviesPage />} />
-          <Route path="/movies/upcoming" element={<UpcomingMoviesPage />} />
-          <Route path="/movies/:id" element={<MoviePage />} />
-          <Route path="/" element={<HomePage />} />
-          <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+        <Siteheader />
+          <MoviesContextProvider>
+            <Routes>
+                <Route path="/reviews/:id" element={<MoviesReviewPage />} />
+                <Route path="/movies/favourites" element={<FavouriteMoviesPage />} />
+                <Route path="/movies/upcoming" element={<UpcomingMoviesPage />} />
+                <Route path="/movies/:id" element={<MoviePage />} />
+                <Route path="/" element={<HomePage />} />
+                <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+        </MoviesContextProvider>
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
