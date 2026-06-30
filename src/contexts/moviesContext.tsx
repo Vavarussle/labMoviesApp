@@ -7,12 +7,18 @@ interface MovieContextInterface {
     addToFavourites: ((movie: BaseMovieProps) => void);
     removeFromFavourites: ((movie: BaseMovieProps) => void);
     addReview: ((movie: BaseMovieProps, review: Review) => void);  // NEW
+    mustWatch: number[];
+    addToMustWatch: ((movie: BaseMovieProps) => void);
+    removeFromMustWatch: ((movie: BaseMovieProps) => void);
 }
 const initialContextState: MovieContextInterface = {
     favourites: [],
     addToFavourites: () => {},
     removeFromFavourites: () => {},
     addReview: (movie, review) => { movie.id, review},  // NEW
+    mustWatch: [],
+    addToMustWatch: () => {},
+    removeFromMustWatch: () => {},
 };
 
 export const MoviesContext = React.createContext<MovieContextInterface>(initialContextState);
@@ -20,6 +26,7 @@ export const MoviesContext = React.createContext<MovieContextInterface>(initialC
 const MoviesContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const [myReviews, setMyReviews] = useState<Review[]>([]);
     const [favourites, setFavourites] = useState<number[]>([]);
+    const [mustWatch, setMustWatch] = useState<number[]>([]);
 
     const addToFavourites = useCallback((movie: BaseMovieProps) => {
         setFavourites((prevFavourites) => {
@@ -38,6 +45,19 @@ const MoviesContextProvider: React.FC<React.PropsWithChildren> = ({ children }) 
         setMyReviews( {...myReviews, [movie.id]: review } )
       };
 
+    const addToMustWatch = useCallback((movie: BaseMovieProps) => {
+        setMustWatch((prevMustWatch) => {
+            if (!prevMustWatch.includes(movie.id)) {
+                return [...prevMustWatch, movie.id];
+            }
+            return prevMustWatch;
+        });
+    }, []);
+
+    const removeFromMustWatch = useCallback((movie: BaseMovieProps) => {
+        setMustWatch((prevMustWatch) => prevMustWatch.filter((mId) => mId !== movie.id));
+    }, []);
+
  return (
         <MoviesContext.Provider
             value={{
@@ -45,6 +65,9 @@ const MoviesContextProvider: React.FC<React.PropsWithChildren> = ({ children }) 
                 addToFavourites,
                 removeFromFavourites,
                 addReview,    // NEW
+                mustWatch,
+                addToMustWatch,
+                removeFromMustWatch,
             }}
         >
             {children}
