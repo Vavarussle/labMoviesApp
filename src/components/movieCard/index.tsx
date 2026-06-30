@@ -24,6 +24,11 @@ const styles = {
   },
 };
 
+interface MovieCardProps  {
+  movie: BaseMovieProps;
+  selectFavourite: (movieId: number) => void;
+} // Add this
+
 const MovieCard: React.FC<MovieCardProps> = ({movie, selectFavourite}) => {
  
   const handleAddToFavourite = (e: MouseEvent<HTMLButtonElement>) => {

@@ -26,6 +26,9 @@ const MoviePage: React.FC= () => {
   const { id } = useParams();
   const [movie, setMovie] = useState<MovieDetailsProps>();
   const [images, setImages] = useState<MovieImage[]>([]);
+  const favouriteMovies = JSON.parse(localStorage.getItem("favourites") || "[]");
+
+  const isFavourite = favouriteMovies.some((m: MovieDetailsProps) => m.id === movie?.id);
 
   useEffect(() => {
     getMovie(id ?? "").then((movie) => {
@@ -45,7 +48,7 @@ const MoviePage: React.FC= () => {
     <>
       {movie ? (
         <>
-          <MovieHeader {...movie} />
+          <MovieHeader {...movie} favourite={isFavourite} />
           <Grid container spacing={5} style={{ padding: "15px" }}>
             <Grid item xs={3}>
               <div >
