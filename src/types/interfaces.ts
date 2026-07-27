@@ -58,6 +58,12 @@ export interface Review {
   movieId: number,
   }
 
+export interface TMDBReview {
+  id: string;
+  author: string;
+  content: string;
+}
+
 
 export interface GenreData {
   genres: {

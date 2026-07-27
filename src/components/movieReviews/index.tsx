@@ -9,8 +9,7 @@ import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
 import { getMovieReviews } from "../../api/tmdb-api";
 import { excerpt } from "../../util";
-
-import { MovieDetailsProps, Review } from "../../types/interfaces"; // Import the MovieT type from the appropriate location
+import { MovieDetailsProps, TMDBReview } from "../../types/interfaces"; // Import the MovieT type from the appropriate location
 
 const styles = {
     table: {
@@ -19,7 +18,7 @@ const styles = {
 };
 
 const MovieReviews: React.FC<MovieDetailsProps> = (movie) => { 
-    const [reviews, setReviews] = useState([]);
+    const [reviews, setReviews] = useState<TMDBReview[]>([]);
 
     useEffect(() => {
         getMovieReviews(movie.id).then((reviews) => {
@@ -39,7 +38,7 @@ const MovieReviews: React.FC<MovieDetailsProps> = (movie) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {reviews.map((r: Review) => (
+                    {reviews.map((r: TMDBReview) => (
                         <TableRow key={r.id}>
                             <TableCell component="th" scope="row">
                                 {r.author}

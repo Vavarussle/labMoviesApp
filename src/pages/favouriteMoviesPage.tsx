@@ -58,8 +58,6 @@ const FavouriteMoviesPage: React.FC = () => {
     setFilterValues(updatedFilterSet);
   };
 
-  const toDo = () => true;
-
   return (
     <>
       <PageTemplate
