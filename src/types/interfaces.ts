@@ -82,3 +82,39 @@ export interface DiscoverMovies {
 export type FilterOption = "title" | "genre";
 
   
+export interface BaseActorProps {
+  id: number;
+  name: string;
+  popularity: number;
+  profile_path?: string;
+  known_for_department: string;
+  favourite?: boolean;
+}
+
+export interface ActorDetailsProps extends BaseActorProps {
+  biography: string;
+  birthday: string | null;
+  deathday: string | null;
+  place_of_birth: string | null;
+  homepage: string | null;
+  also_known_as: string[];
+}
+
+export interface ActorMovieCredit {
+  id: number;
+  title: string;
+  character: string;
+  release_date?: string;
+  poster_path?: string;
+}
+
+export interface ActorMovieCredits {
+  cast: ActorMovieCredit[];
+}
+
+export interface PopularActors {
+  page: number;
+  total_pages: number;
+  total_results: number;
+  results: BaseActorProps[];
+}

@@ -12,19 +12,19 @@ export const getMovies = () => {
 };
 
   
-  export const getMovie = (id: string) => {
-    return fetch(
-      `https://api.themoviedb.org/3/movie/${id}?api_key=${import.meta.env.VITE_TMDB_KEY}`
-    ).then((response) => {
-      if (!response.ok) {
-        throw new Error(`Failed to get movie data. Response status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .catch((error) => {
-      throw error
+export const getMovie = (id: string) => {
+  return fetch(
+    `https://api.themoviedb.org/3/movie/${id}?api_key=${import.meta.env.VITE_TMDB_KEY}`
+  ).then((response) => {
+    if (!response.ok) {
+      throw new Error(`Failed to get movie data. Response status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .catch((error) => {
+    throw error
   });
-  };
+};
 
   
   export const getGenres = () => {
@@ -84,3 +84,36 @@ export const getMovies = () => {
         });
     };
 
+    export const getPopularActors = (page = 1) => {
+      return fetch(
+        `https://api.themoviedb.org/3/person/popular?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&page=${page}`
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              `Unable to fetch popular actors. Response status: ${response.status}`
+            );
+          }
+          return response.json();
+        })
+        .catch((error) => {
+          throw error;
+        });
+    };
+
+    export const getActorMovieCredits = (id: string | number) => {
+      return fetch(
+        `https://api.themoviedb.org/3/person/${id}/movie_credits?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US`
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              `Unable to fetch actor movie credits. Response status: ${response.status}`
+            );
+          }
+          return response.json();
+        })
+        .catch((error) => {
+          throw error;
+        });
+    };
