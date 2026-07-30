@@ -91,6 +91,15 @@ export interface BaseActorProps {
   favourite?: boolean;
 }
 
+export interface ActorListProps {
+  actors: BaseActorProps[];
+  action: (actor: BaseActorProps) => React.ReactNode;
+}
+
+export interface ActorListPageTemplateProps extends ActorListProps {
+  title: string;
+}
+
 export interface ActorDetailsProps extends BaseActorProps {
   biography: string;
   birthday: string | null;
