@@ -127,3 +127,15 @@ export interface PopularActors {
   total_results: number;
   results: BaseActorProps[];
 }
+
+export interface MovieCastMember {
+  id: number;
+  name: string;
+  character: string;
+  profile_path?: string;
+  order: number;
+}
+
+export interface MovieCredits {
+  cast: MovieCastMember[];
+}
