@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -6,11 +6,12 @@ import CardMedia from "@mui/material/CardMedia";
 import CardHeader from "@mui/material/CardHeader";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import PersonIcon from "@mui/icons-material/Person";
-import StarRateIcon from "@mui/icons-material/StarRate";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import Grid from "@mui/material/Grid";
+import Avatar from "@mui/material/Avatar";
 import { Link } from "react-router-dom";
 import { BaseActorProps } from "../../types/interfaces";
+import { ActorsContext } from "../../contexts/actorsContext";
 import img from "../../images/film-poster-placeholder.png";
 
 const styles = {
@@ -20,6 +21,9 @@ const styles = {
   media: {
     height: 500,
   },
+  avatar: {
+    backgroundColor: "rgb(255, 0, 0)",
+  },
 };
 
 interface ActorCardProps {
@@ -28,9 +32,20 @@ interface ActorCardProps {
 }
 
 const ActorCard: React.FC<ActorCardProps> = ({ actor, action }) => {
+  const { favouriteActors } = useContext(ActorsContext);
+
+  const isFavourite = favouriteActors.includes(actor.id);
+
   return (
     <Card sx={styles.card}>
       <CardHeader
+        avatar={
+          isFavourite ? (
+            <Avatar sx={styles.avatar}>
+              <FavoriteIcon />
+            </Avatar>
+          ) : null
+        }
         title={
           <Typography variant="h5" component="p">
             {actor.name}
@@ -45,23 +60,20 @@ const ActorCard: React.FC<ActorCardProps> = ({ actor, action }) => {
             ? `https://image.tmdb.org/t/p/w500/${actor.profile_path}`
             : img
         }
+        title={actor.name}
       />
 
       <CardContent>
         <Grid container>
-          <Grid item xs={7}>
+          <Grid item xs={12}>
             <Typography variant="body1" component="p">
-              <PersonIcon fontSize="small" />
-              {" "}
-              {actor.known_for_department}
+              Department: {actor.known_for_department || "Not available"}
             </Typography>
           </Grid>
 
-          <Grid item xs={5}>
+          <Grid item xs={12}>
             <Typography variant="body1" component="p">
-              <StarRateIcon fontSize="small" />
-              {" "}
-              {actor.popularity.toFixed(1)}
+              Popularity: {actor.popularity?.toFixed(1) || "Not available"}
             </Typography>
           </Grid>
         </Grid>
@@ -72,7 +84,7 @@ const ActorCard: React.FC<ActorCardProps> = ({ actor, action }) => {
 
         <Link to={`/actors/${actor.id}`}>
           <Button variant="outlined" size="medium" color="primary">
-            More Info ...
+            More Info
           </Button>
         </Link>
       </CardActions>

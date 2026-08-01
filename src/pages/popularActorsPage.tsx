@@ -7,6 +7,7 @@ import {
 } from "../types/interfaces";
 import PageTemplate from "../components/templateActorListPage";
 import Spinner from "../components/spinner";
+import AddToFavouriteActors from "../components/cardIcons/addToFavouriteActors";
 
 const PopularActorsPage: React.FC = () => {
   const {
@@ -33,7 +34,9 @@ const PopularActorsPage: React.FC = () => {
     <PageTemplate
       title="Popular Actors"
       actors={actors}
-      action={(_actor: BaseActorProps) => null}
+      action={(actor: BaseActorProps) => (
+        <AddToFavouriteActors {...actor} />
+      )}
     />
   );
 };
