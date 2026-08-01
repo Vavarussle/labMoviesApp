@@ -6,6 +6,10 @@ import TextField from "@mui/material/TextField";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import FormControl from "@mui/material/FormControl";
 import { ActorFilterOption } from "../../types/interfaces";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import { SelectChangeEvent } from "@mui/material";
 
 const styles = {
   root: {
@@ -21,22 +25,22 @@ const styles = {
 interface FilterActorsCardProps {
   onUserInput: (type: ActorFilterOption, value: string) => void;
   nameFilter: string;
-  departmentFilter: string;
+  popularityFilter: string;
 }
 
 const FilterActorsCard: React.FC<FilterActorsCardProps> = ({
   nameFilter,
-  departmentFilter,
+  popularityFilter,
   onUserInput,
 }) => {
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     onUserInput("name", event.target.value);
   };
 
-  const handleDepartmentChange = (
-    event: ChangeEvent<HTMLInputElement>
+  const handlePopularityChange = (
+    event: SelectChangeEvent<string>
   ) => {
-    onUserInput("department", event.target.value);
+    onUserInput("popularity", event.target.value);
   };
 
   return (
@@ -46,9 +50,8 @@ const FilterActorsCard: React.FC<FilterActorsCardProps> = ({
           <FilterAltIcon fontSize="large" />
           Filter the actors.
         </Typography>
-
-        <FormControl sx={styles.formControl}>
           <TextField
+            sx={styles.formControl}
             id="actor-name-search"
             label="Actor name"
             type="search"
@@ -56,17 +59,27 @@ const FilterActorsCard: React.FC<FilterActorsCardProps> = ({
             variant="filled"
             onChange={handleNameChange}
           />
-        </FormControl>
 
         <FormControl sx={styles.formControl}>
-          <TextField
-            id="actor-department-search"
-            label="Known-for department"
-            type="search"
-            value={departmentFilter}
-            variant="filled"
-            onChange={handleDepartmentChange}
-          />
+        <InputLabel id="popularity-label">
+            Minimum popularity
+          </InputLabel>
+
+          <Select
+            labelId="popularity-label"
+            id="popularity-select"
+            value={popularityFilter}
+            label="Minimum popularity"
+            onChange={handlePopularityChange}>
+            <MenuItem value="0">
+              All popularity levels
+            </MenuItem>
+
+            <MenuItem value="10">10+</MenuItem>
+            <MenuItem value="20">20+</MenuItem>
+            <MenuItem value="40">40+</MenuItem>
+            <MenuItem value="60">60+</MenuItem>
+          </Select>
         </FormControl>
       </CardContent>
     </Card>

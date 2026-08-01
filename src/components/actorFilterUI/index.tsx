@@ -19,13 +19,13 @@ interface ActorFilterUIProps {
     value: string
   ) => void;
   nameFilter: string;
-  departmentFilter: string;
+  popularityFilter: string;
 }
 
 const ActorFilterUI: React.FC<ActorFilterUIProps> = ({
   onFilterValuesChange,
   nameFilter,
-  departmentFilter,
+  popularityFilter,
 }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -48,7 +48,7 @@ const ActorFilterUI: React.FC<ActorFilterUIProps> = ({
         <FilterActorsCard
           onUserInput={onFilterValuesChange}
           nameFilter={nameFilter}
-          departmentFilter={departmentFilter}
+          popularityFilter={popularityFilter}
         />
       </Drawer>
     </>

@@ -80,7 +80,7 @@ export interface DiscoverMovies {
 }
 
 export type FilterOption = "title" | "genre";
-export type ActorFilterOption = "name" | "department";
+export type ActorFilterOption = "name" | "popularity";
 
   
 export interface BaseActorProps {

@@ -18,10 +18,10 @@ const nameFiltering = {
   condition: (actor: BaseActorProps, value: string) => actor.name.toLowerCase().search(value.toLowerCase()) !== -1,
 };
 
-const departmentFiltering = {
-  name: "department",
-  value: "",
-  condition: (actor: BaseActorProps, value: string) => actor.known_for_department.toLowerCase().search(value.toLowerCase()) !== -1,
+const popularityFiltering = {
+  name: "popularity",
+  value: "0",
+  condition: (actor: BaseActorProps, value: string) => {const popularityValue = Number(value); return actor.popularity >= popularityValue;},
 };
 
 const PopularActorsPage: React.FC = () => {
@@ -35,7 +35,7 @@ const PopularActorsPage: React.FC = () => {
     () => getPopularActors()
   );
 
-    const { filterValues, setFilterValues, filterFunction } = useFiltering([nameFiltering, departmentFiltering, ]);
+    const { filterValues, setFilterValues, filterFunction } = useFiltering([nameFiltering, popularityFiltering, ]);
 
   if (isLoading) {
     return <Spinner />;
@@ -70,7 +70,7 @@ const PopularActorsPage: React.FC = () => {
     <ActorFilterUI
         onFilterValuesChange={changeFilterValues}
         nameFilter={filterValues[0].value}
-        departmentFilter={filterValues[1].value}
+        popularityFilter={filterValues[1].value}
     />
     </>
   );
