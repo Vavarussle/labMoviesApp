@@ -79,7 +79,28 @@ export interface DiscoverMovies {
   results: BaseMovieProps[];
 }
 
-export type FilterOption = "title" | "genre";
+export interface MovieSearchCriteria {
+  genre: string;
+  year: string;
+  minimumRating: string;
+  sortBy: string;
+}
+
+export type FilterOption =
+  "title"
+  | "genre"
+  | "rating"
+  | "year";
+
+export type MovieSortOption =
+  "none"
+  | "popularityDescending"
+  | "popularityAscending"
+  | "ratingDescending"
+  | "ratingAscending"
+  | "releaseDateDescending"
+  | "releaseDateAscending";
+
 export type ActorFilterOption = "name" | "popularity";
 
   

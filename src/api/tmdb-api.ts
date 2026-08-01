@@ -1,3 +1,5 @@
+import { MovieSearchCriteria } from "../types/interfaces";
+
 export const getMovies = () => {
   return fetch(
     `https://api.themoviedb.org/3/discover/movie?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&include_adult=false&include_video=false&page=1`
@@ -146,6 +148,45 @@ export const getMovieCredits = (id: string | number) => {
       if (!response.ok) {
         throw new Error(
           `Unable to fetch movie credits. Response status: ${response.status}`
+        );
+      }
+
+      return response.json();
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+export const getMoviesByCriteria = (
+  criteria: MovieSearchCriteria
+) => {
+  const genreParameter =
+    criteria.genre !== "0"
+      ? `&with_genres=${criteria.genre}`
+      : "";
+
+  const yearParameter =
+    criteria.year !== ""
+      ? `&primary_release_year=${criteria.year}`
+      : "";
+
+  const ratingParameter =
+    criteria.minimumRating !== "0"
+      ? `&vote_average.gte=${criteria.minimumRating}`
+      : "";
+
+  return fetch(
+    `https://api.themoviedb.org/3/discover/movie?api_key=${
+      import.meta.env.VITE_TMDB_KEY
+    }&language=en-US&include_adult=false&include_video=false&page=1&sort_by=${
+      criteria.sortBy
+    }${genreParameter}${yearParameter}${ratingParameter}`
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(
+          `Unable to search for movies. Response status: ${response.status}`
         );
       }
 

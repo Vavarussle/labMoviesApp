@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import FilterCard from "../filterMoviesCard";
 import Fab from "@mui/material/Fab";
 import Drawer from "@mui/material/Drawer";
-import { BaseMovieProps } from "../../types/interfaces";
+import { BaseMovieProps, FilterOption, MovieSortOption } from "../../types/interfaces";
 
 export const titleFilter = (movie: BaseMovieProps, value: string): boolean => {
     return movie.title.toLowerCase().search(value.toLowerCase()) !== -1;
@@ -12,6 +12,28 @@ export const genreFilter = (movie: BaseMovieProps, value: string) => {
     const genreId = Number(value);
     const genreIds = movie.genre_ids;
     return genreId > 0 && genreIds ? genreIds.includes(genreId) : true;
+};
+
+export const ratingFilter = (
+  movie: BaseMovieProps,
+  value: string
+): boolean => {
+  const minimumRating = Number(value);
+
+  return movie.vote_average >= minimumRating;
+};
+
+export const yearFilter = (
+  movie: BaseMovieProps,
+  value: string
+): boolean => {
+  if (value === "") {
+    return true;
+  }
+
+  return movie.release_date
+    ? movie.release_date.startsWith(value)
+    : false;
 };
 
 const styles = {
@@ -27,13 +49,17 @@ const styles = {
 };
 
 interface MovieFilterUIProps {
-    onFilterValuesChange: (f: string, s: string) => void;
+    onFilterValuesChange: (type: FilterOption, value: string) => void;
+    onSortChange: (value: MovieSortOption) => void;
     titleFilter: string;
     genreFilter: string;
+    ratingFilter: string;
+    yearFilter: string;
+    sortOption: MovieSortOption;
 }
 
 
-const MovieFilterUI: React.FC<MovieFilterUIProps> = ({ onFilterValuesChange, titleFilter, genreFilter }) => {
+const MovieFilterUI: React.FC<MovieFilterUIProps> = ({ onFilterValuesChange, onSortChange, titleFilter, genreFilter, ratingFilter, yearFilter, sortOption }) => {
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     return (
@@ -53,8 +79,12 @@ const MovieFilterUI: React.FC<MovieFilterUIProps> = ({ onFilterValuesChange, tit
             >
                 <FilterCard
                     onUserInput={onFilterValuesChange}
+                    onSortChange={onSortChange}
                     titleFilter={titleFilter}
                     genreFilter={genreFilter}
+                    ratingFilter={ratingFilter}
+                    yearFilter={yearFilter}
+                    sortOption={sortOption}
                 />
             </Drawer>
         </>

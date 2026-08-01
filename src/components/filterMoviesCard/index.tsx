@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from "react";
-import { FilterOption , GenreData} from "../../types/interfaces";
+import { FilterOption , GenreData, MovieSortOption} from "../../types/interfaces";
 import { SelectChangeEvent } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -30,12 +30,16 @@ const styles = {
 
 
 interface FilterMoviesCardProps {
-  onUserInput: (f: FilterOption, s: string)  => void; // Add this line
+  onUserInput: (type: FilterOption, value: string) => void;
+  onSortChange: (value: MovieSortOption) => void;
   titleFilter: string;
   genreFilter: string;
+  ratingFilter: string;
+  yearFilter: string;
+  sortOption: MovieSortOption;
 }
 
-const FilterMoviesCard: React.FC<FilterMoviesCardProps> = ({ titleFilter, genreFilter, onUserInput }) => {
+const FilterMoviesCard: React.FC<FilterMoviesCardProps> = ({ titleFilter, genreFilter, ratingFilter, yearFilter, sortOption, onUserInput, onSortChange, }) => {
   const { data, error, isLoading, isError } = useQuery<GenreData, Error>("genres", getGenres);
 
   if (isLoading) {
@@ -60,6 +64,24 @@ const FilterMoviesCard: React.FC<FilterMoviesCardProps> = ({ titleFilter, genreF
 
   const handleGenreChange = (e: SelectChangeEvent) => {
     handleChange(e, "genre", e.target.value)
+  };
+
+  const handleRatingChange = (
+    event: SelectChangeEvent
+  ) => {
+    onUserInput("rating", event.target.value);
+  };
+
+  const handleYearChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    onUserInput("year", event.target.value);
+  };
+
+  const handleSortChange = (
+    event: SelectChangeEvent
+  ) => {
+    onSortChange(event.target.value as MovieSortOption);
   };
 
   return (
@@ -97,6 +119,42 @@ const FilterMoviesCard: React.FC<FilterMoviesCardProps> = ({ titleFilter, genreF
             })}
           </Select>
         </FormControl>
+
+        <FormControl sx={styles.formControl}>
+            <InputLabel id="rating-label">
+              Minimum rating
+            </InputLabel>
+
+            <Select
+              labelId="rating-label"
+              id="rating-select"
+              value={ratingFilter}
+              label="Minimum rating"
+              onChange={handleRatingChange}
+            >
+              <MenuItem value="0">
+                All ratings
+              </MenuItem>
+
+              <MenuItem value="5">5+</MenuItem>
+              <MenuItem value="6">6+</MenuItem>
+              <MenuItem value="7">7+</MenuItem>
+              <MenuItem value="8">8+</MenuItem>
+            </Select>
+          </FormControl>
+
+          <TextField
+            sx={styles.formControl}
+            id="release-year-filter"
+            label="Release year"
+            type="number"
+            value={yearFilter}
+            variant="filled"
+            onChange={handleYearChange}
+            inputProps={{
+              min: 1900,
+              max: 2100,
+            }} />
       </CardContent>
     </Card>
     <Card sx={styles.root} variant="outlined">
@@ -105,6 +163,47 @@ const FilterMoviesCard: React.FC<FilterMoviesCardProps> = ({ titleFilter, genreF
             <SortIcon fontSize="large" />
             Sort the movies.
           </Typography>
+          <FormControl sx={styles.formControl}>
+            <InputLabel id="sort-label">
+              Sort by
+            </InputLabel>
+
+            <Select
+              labelId="sort-label"
+              id="sort-select"
+              value={sortOption}
+              label="Sort by"
+              onChange={handleSortChange}
+            >
+              <MenuItem value="none">
+                Default order
+              </MenuItem>
+
+              <MenuItem value="popularityDescending">
+                Popularity: high to low
+              </MenuItem>
+
+              <MenuItem value="popularityAscending">
+                Popularity: low to high
+              </MenuItem>
+
+              <MenuItem value="ratingDescending">
+                Rating: high to low
+              </MenuItem>
+
+              <MenuItem value="ratingAscending">
+                Rating: low to high
+              </MenuItem>
+
+              <MenuItem value="releaseDateDescending">
+                Release date: newest first
+              </MenuItem>
+
+              <MenuItem value="releaseDateAscending">
+                Release date: oldest first
+              </MenuItem>
+            </Select>
+          </FormControl>
         </CardContent>
       </Card>
       </>

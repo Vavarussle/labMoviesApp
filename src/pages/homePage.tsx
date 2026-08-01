@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import PageTemplate from "../components/templateMovieListPage";
 import { getMovies } from "../api/tmdb-api";
 import useFiltering from "../hooks/useFiltering";
 import MovieFilterUI, {
   titleFilter,
   genreFilter,
+  ratingFilter,
+  yearFilter,
 } from "../components/movieFilterUI";
-import { BaseMovieProps, DiscoverMovies } from "../types/interfaces";
+import { BaseMovieProps, DiscoverMovies, FilterOption, MovieSortOption } from "../types/interfaces";
 import { useQuery } from "react-query";
 import Spinner from "../components/spinner";
 import AddToFavouritesIcon from "../components/cardIcons/addToFavourites";
@@ -23,11 +25,26 @@ const genreFiltering = {
   condition: genreFilter,
 };
 
+const ratingFiltering = {
+  name: "rating",
+  value: "0",
+  condition: ratingFilter,
+};
+
+const yearFiltering = {
+  name: "year",
+  value: "",
+  condition: yearFilter,
+};
+
 const HomePage: React.FC = () => {
   const { data, error, isLoading, isError } = useQuery<DiscoverMovies, Error>("discover", getMovies);
   const { filterValues, setFilterValues, filterFunction } = useFiltering(
-    [titleFiltering, genreFiltering]
+    [titleFiltering, genreFiltering, ratingFiltering, yearFiltering]
   );
+
+  const [sortOption, setSortOption] =
+    useState<MovieSortOption>("none");
 
   if (isLoading) {
     return <Spinner />;
@@ -38,37 +55,106 @@ const HomePage: React.FC = () => {
   }
 
 
-  const changeFilterValues = (type: string, value: string) => {
+  const changeFilterValues = (type: FilterOption, value: string) => {
     const changedFilter = { name: type, value: value };
-    const updatedFilterSet =
-      type === "title"
-        ? [changedFilter, filterValues[1]]
-        : [filterValues[0], changedFilter];
+    const updatedFilterSet = filterValues.map(
+      (filterValue) =>
+        filterValue.name === type
+          ? changedFilter
+          : filterValue
+    );
     setFilterValues(updatedFilterSet);
   };
 
   const movies = data ? data.results : [];
-  const displayedMovies = filterFunction(movies);
+  const filteredMovies =
+    filterFunction(movies) as BaseMovieProps[];
 
-  // Redundant, but necessary to avoid app crashing.
-  const favourites = movies.filter(m => m.favourite)
-  localStorage.setItem("favourites", JSON.stringify(favourites));
+  const displayedMovies = [...filteredMovies];
+
+  switch (sortOption) {
+    case "popularityDescending":
+      displayedMovies.sort(
+        (firstMovie, secondMovie) =>
+          secondMovie.popularity - firstMovie.popularity
+      );
+      break;
+
+    case "popularityAscending":
+      displayedMovies.sort(
+        (firstMovie, secondMovie) =>
+          firstMovie.popularity - secondMovie.popularity
+      );
+      break;
+
+    case "ratingDescending":
+      displayedMovies.sort(
+        (firstMovie, secondMovie) =>
+          secondMovie.vote_average -
+          firstMovie.vote_average
+      );
+      break;
+
+    case "ratingAscending":
+      displayedMovies.sort(
+        (firstMovie, secondMovie) =>
+          firstMovie.vote_average -
+          secondMovie.vote_average
+      );
+      break;
+
+    case "releaseDateDescending":
+      displayedMovies.sort(
+        (firstMovie, secondMovie) =>
+          secondMovie.release_date.localeCompare(
+            firstMovie.release_date
+          )
+      );
+      break;
+
+    case "releaseDateAscending":
+      displayedMovies.sort(
+        (firstMovie, secondMovie) =>
+          firstMovie.release_date.localeCompare(
+            secondMovie.release_date
+          )
+      );
+      break;
+
+    default:
+      break;
+  }
+
+  const favourites = movies.filter(
+    (movie) => movie.favourite
+  );
+
+  localStorage.setItem(
+    "favourites",
+    JSON.stringify(favourites)
+  );
 
   return (
     <>
       <PageTemplate
         title="Discover Movies"
         movies={displayedMovies}
-        action={(movie: BaseMovieProps) => {
-          return <AddToFavouritesIcon {...movie} />
-        }}
+        action={(movie: BaseMovieProps) => (
+          <AddToFavouritesIcon {...movie} />
+        )}
       />
+
       <MovieFilterUI
         onFilterValuesChange={changeFilterValues}
+        onSortChange={setSortOption}
         titleFilter={filterValues[0].value}
         genreFilter={filterValues[1].value}
+        ratingFilter={filterValues[2].value}
+        yearFilter={filterValues[3].value}
+        sortOption={sortOption}
       />
     </>
   );
 };
+
 export default HomePage;

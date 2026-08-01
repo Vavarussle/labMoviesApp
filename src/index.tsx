@@ -15,6 +15,7 @@ import PopularActorsPage from "./pages/popularActorsPage.tsx";
 import ActorDetailsPage from "./pages/actorDetailsPage";
 import ActorsContextProvider from "./contexts/actorsContext";
 import FavouriteActorsPage from "./pages/favouriteActorsPage.tsx";
+import MovieSearchPage from "./pages/movieSearchPage.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,6 +40,7 @@ const App = () => {
                   <Route path="/reviews/:id" element={<MoviesReviewPage />} />
                   <Route path="/movies/favourites" element={<FavouriteMoviesPage />} />
                   <Route path="/movies/upcoming" element={<UpcomingMoviesPage />} />
+                  <Route path="/movies/search" element={<MovieSearchPage />} />
                   <Route path="/movies/:id" element={<MoviePage />} />
                   <Route
                   path="/actors/favourites"

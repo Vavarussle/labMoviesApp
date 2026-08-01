@@ -32,8 +32,12 @@ type Story = StoryObj<typeof meta>;
 export const Basic: Story = {
   args: {
     onUserInput: action("filter input"),
+    onSortChange: action("sort change"),
     titleFilter: "",
     genreFilter: "All",
+    ratingFilter: "All",
+    yearFilter: "All",
+    sortOption: "none"
   },
 };
 Basic.storyName = "Default";
