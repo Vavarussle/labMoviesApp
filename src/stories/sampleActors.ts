@@ -1,0 +1,13 @@
+const sampleActor = {
+  adult: false,
+  gender: 2,
+  id: 287,
+  known_for_department: "Acting",
+  name: "Brad Pitt",
+  original_name: "Brad Pitt",
+  popularity: 45.8,
+  profile_path: "/kU3B75TyRiCgE270EyZnHjfivoq.jpg",
+  known_for: [],
+};
+
+export default sampleActor;
