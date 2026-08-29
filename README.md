@@ -1,6 +1,7 @@
 # React Movies Application
 
 GitHub Repository: https://github.com/Vavarussle/labMoviesApp
+App Demo: https://youtu.be/CHOyzozAaB4
 
 ## Overview
 
